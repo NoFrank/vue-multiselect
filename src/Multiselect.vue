@@ -2,12 +2,11 @@
   <div
     :tabindex="tabindex"
     :class="{ 'multiselect--active': isOpen, 'multiselect--disabled': disabled, 'multiselect--above': isAbove }"
-    @focus="activate()"
-    @blur="searchable ? false : deactivate()"
+    @blur="searchable ? false : deactivate('div.blur',$event)"
     @keydown.self.down.prevent="pointerForward()"
     @keydown.self.up.prevent="pointerBackward()"
     @keydown.enter.tab.stop.self="addPointerElement($event)"
-    @keyup.esc="deactivate()"
+    @keyup.esc="deactivate('div.keyup',$event)"
     class="multiselect">
       <slot name="caret" :toggle="toggle">
         <div @mousedown.prevent.stop="toggle()" class="multiselect__select"></div>
@@ -42,15 +41,15 @@
           :value="isOpen ? search : currentOptionLabel"
           :disabled="disabled"
           @input="updateSearch($event.target.value)"
-          @focus.prevent="activate()"
-          @blur.prevent="deactivate()"
-          @keyup.esc="deactivate()"
+          @focus.prevent="activate('input.focus',$event)"
+          @blur.prevent="deactivate('input.blur',$event)"
+          @keyup.esc="deactivate('input.keyup',$event)"
           @keydown.down.prevent="pointerForward()"
           @keydown.up.prevent="pointerBackward()"
           @keydown.enter.prevent.stop.self="addPointerElement($event)"
           @keydown.delete.stop="removeLastElement()"
           class="multiselect__input"/>
-        <span
+        <span @click="activate('div.span',$event)"
           v-if="!searchable"
           class="multiselect__single"
           v-text="currentOptionLabel">
@@ -60,7 +59,8 @@
         <div
           class="multiselect__content-wrapper"
           v-show="isOpen"
-          @mousedown.prevent
+          @mousedown.prevent="mousedown($event)"
+          @blur="forceDeactivate($event)"
           :style="{ maxHeight: optimizedHeight + 'px' }"
           ref="list">
           <ul class="multiselect__content" :style="contentStyle">
