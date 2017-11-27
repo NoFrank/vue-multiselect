@@ -534,7 +534,6 @@ export default {
      * Sets this.isOpen to TRUE
      */
     activate (source, element) {
-      console.debug('activate: ' + source)
       /* istanbul ignore else */
       if (this.isOpen || this.disabled) return
 
@@ -555,9 +554,6 @@ export default {
       this.$emit('open', this.id)
     },
     mousedown (event) {
-      console.debug('mouse down')
-      console.debug(event)
-      console.debug(event && event.target && event.target.className === 'multiselect__content-wrapper')
       if (event && event.target && event.target.className === 'multiselect__content-wrapper') {
         this.cancelBlur = true
       } else {
@@ -565,7 +561,6 @@ export default {
       }
     },
     forceDeactivate (event) {
-      console.debug('forcing close')
       this.cancelBlur = false
       this.deactivate()
     },
@@ -574,8 +569,6 @@ export default {
      * Sets this.isOpen to FALSE
      */
     deactivate (source, event) {
-      console.debug('deactivate: ' + source + ', cancelBlur: ' + this.cancelBlur)
-      if (event) console.log(event)
       if (this.cancelBlur) {
         this.cancelBlur = false
         return
@@ -602,7 +595,6 @@ export default {
      * @property {Boolean} isOpen indicates if dropdown is open
      */
     toggle () {
-      console.log('toggle')
       this.isOpen
         ? this.deactivate()
         : this.activate()
